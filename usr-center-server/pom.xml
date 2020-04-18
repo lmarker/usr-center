@@ -29,6 +29,10 @@
             <artifactId>usr-center-core</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.maksdu.usr</groupId>
+            <artifactId>usr-center-service</artifactId>
+        </dependency>
     </dependencies>
 
     <profiles>
