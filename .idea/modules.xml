@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/maksdu-usr-center.iml" filepath="$PROJECT_DIR$/maksdu-usr-center.iml" />
+      <module fileurl="file://$PROJECT_DIR$/usr-center-core/usr-center-core.iml" filepath="$PROJECT_DIR$/usr-center-core/usr-center-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/usr-center-server/usr-center-server.iml" filepath="$PROJECT_DIR$/usr-center-server/usr-center-server.iml" />
+    </modules>
+  </component>
+</project>

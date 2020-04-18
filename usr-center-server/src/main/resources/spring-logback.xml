@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!-- 用Spring默认的logging配置会默认打文件
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+    -->
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+
+    <appender name="application" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${LOG_PATH}/application.log</File>
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/application.log.%d{yyyy-MM-dd}</fileNamePattern>
+        </rollingPolicy>
+    </appender>
+
+    <!--
+    <appender name="logstash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <destination>${logstash.host}:${logstash.port}</destination>
+        <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder"/>
+    </appender>
+
+
+    hosts => "172.16.174.177"
+    index => "wms_service-%{+YYYY.MM.dd}"
+    user => "elastic"
+    password => "TwnV4eATMvLT14w9ut7H"
+    -->
+
+    <springProfile name="dev">
+        <root>
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
+    <springProfile name="!dev">
+        <root>
+            <appender-ref ref="application"/>
+        </root>
+    </springProfile>
+</configuration>

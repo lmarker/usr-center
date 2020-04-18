@@ -1,0 +1,3 @@
+com/maksdu/usr/center/core/proxy/feign/WeChatFeign.class
+com/maksdu/usr/center/core/proxy/FeignApiConfig.class
+com/maksdu/usr/center/core/proxy/dto/WeChatAccessTokenDTO.class
