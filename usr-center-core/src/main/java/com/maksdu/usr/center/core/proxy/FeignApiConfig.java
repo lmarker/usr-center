@@ -2,8 +2,11 @@ package com.maksdu.usr.center.core.proxy;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.FeignException;
+import feign.codec.Decoder;
 import feign.codec.ErrorDecoder;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ClassUtils;
 import org.apache.http.HttpStatus;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,11 +17,13 @@ import java.io.IOException;
  * @author lijiahao
  */
 @Configuration
+@Slf4j
 public class FeignApiConfig {
 
     private ErrorDecoder decode = new ErrorDecoder.Default();
+    private Decoder decoder = new Decoder.Default();
 
-    @Bean
+
     ErrorDecoder _400errorDecoder(ObjectMapper objectMapper) {
         return (methodKey, response) -> {
             if(response.status() == HttpStatus.SC_BAD_REQUEST) {
@@ -38,6 +43,21 @@ public class FeignApiConfig {
                 }
             }
             return decode.decode(methodKey, response);
+        };
+    }
+
+    @Bean
+    Decoder weChatHttpMessageDecoder(ObjectMapper objectMapper) {
+        return (response, type) -> {
+            if(type.getTypeName().startsWith("com.maksdu.usr.center.core.proxy.dto")) {
+                try {
+                    return objectMapper.readValue(response.body().asInputStream(),
+                            ClassUtils.getClass(type.getTypeName()));
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+            return decoder.decode(response, type);
         };
     }
 
