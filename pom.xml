@@ -107,6 +107,7 @@
     <modules>
         <module>usr-center-server</module>
         <module>usr-center-core</module>
+        <module>usr-center-domain</module>
     </modules>
 
 </project>

@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/maksdu-usr-center.iml" filepath="$PROJECT_DIR$/maksdu-usr-center.iml" />
       <module fileurl="file://$PROJECT_DIR$/usr-center-core/usr-center-core.iml" filepath="$PROJECT_DIR$/usr-center-core/usr-center-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/usr-center-domain/usr-center-domain.iml" filepath="$PROJECT_DIR$/usr-center-domain/usr-center-domain.iml" />
       <module fileurl="file://$PROJECT_DIR$/usr-center-server/usr-center-server.iml" filepath="$PROJECT_DIR$/usr-center-server/usr-center-server.iml" />
     </modules>
   </component>

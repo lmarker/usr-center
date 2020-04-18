@@ -29,14 +29,28 @@ public class FeignApiConfig {
                     e.printStackTrace();
                 }
             }
+            if(response.status() == 40164) {
+                try {
+                    WeChatErrorBody errorBody = objectMapper.readValue(response.body().asInputStream(), WeChatErrorBody.class);
+                    throw new FeignException.BadRequest(errorBody.getErrmsg(), response.request(), null);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
             return decode.decode(methodKey, response);
         };
     }
 
     @Data
     private static class ErrorBody {
-
         private String message;
+    }
 
+    @Data
+    private static class WeChatErrorBody {
+
+        private String errcode;
+
+        private String errmsg;
     }
 }

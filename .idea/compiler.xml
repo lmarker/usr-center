@@ -8,11 +8,13 @@
         <outputRelativeToContentRoot value="true" />
         <module name="usr-center-core" />
         <module name="usr-center-server" />
+        <module name="usr-center-domain" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="maksdu-usr-center" target="1.8" />
       <module name="usr-center-core" target="1.8" />
+      <module name="usr-center-domain" target="1.8" />
       <module name="usr-center-server" target="1.8" />
     </bytecodeTargetLevel>
   </component>
@@ -20,6 +22,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="maksdu-usr-center" options="" />
       <module name="usr-center-core" options="-parameters" />
+      <module name="usr-center-domain" options="-parameters" />
       <module name="usr-center-server" options="-parameters" />
     </option>
   </component>
