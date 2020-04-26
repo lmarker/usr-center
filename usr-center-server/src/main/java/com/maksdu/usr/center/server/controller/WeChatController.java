@@ -73,6 +73,9 @@ public class WeChatController {
         return weChatJsCode2SessionDTO;
     }
 
+    /**
+     * 用于第一次登录时，检查数据库没有该用户信息，通过返回isNotFirstLogin = false 来触发
+     */
     @PostMapping("/user_info")
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public void getUserInfo(@RequestHeader String openid, @RequestBody UserInfo userInfo) {
