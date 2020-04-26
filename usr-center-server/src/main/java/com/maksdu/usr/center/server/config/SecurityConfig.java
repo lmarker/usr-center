@@ -36,6 +36,8 @@ public class SecurityConfig {
 
             http.addFilterBefore(weChatAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
+            //TODO http.authenticationProvider()
+
             http.cors().disable();
 
             http.csrf().disable();
