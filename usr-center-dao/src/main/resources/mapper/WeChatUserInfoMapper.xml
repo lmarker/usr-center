@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.maksdu.usr.center.dao.WeChatUserInfoDAO">
+
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="com.maksdu.usr.center.domain.WeChatUserDetailsDO">
+        insert into usr_info_detail(code, openId, nickName, gender, city, province, country, avatarUrl) values
+        (
+            #{code},
+            #{openId},
+            #{nickName},
+            #{gender},
+            #{city},
+            #{province},
+            #{country},
+            #{avatarUrl}
+        )
+    </insert>
+
+    <select id="getByOpenId" resultType="com.maksdu.usr.center.domain.WeChatUserDetailsDO">
+        select * from usr_info_detail where openId = #{openId}
+    </select>
+</mapper>

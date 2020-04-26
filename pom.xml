@@ -20,6 +20,14 @@
         <feign-version>10.2.3</feign-version>
         <guava.version>28.1-jre</guava.version>
         <spring.cloud.version>Hoxton.SR3</spring.cloud.version>
+        <mysql-connector-java.version>8.0.19</mysql-connector-java.version>
+        <swagger.version>1.5.21</swagger.version>
+        <springfox-swagger.version>2.9.2</springfox-swagger.version>
+        <swagger-bootstrap-ui.version>1.9.3</swagger-bootstrap-ui.version>
+        <dubbo.version>2.7.4.1</dubbo.version>
+        <spring-boot-admin-starter-client.version>2.2.2</spring-boot-admin-starter-client.version>
+        <mybatis-spring-boot-starter.version>2.0.0</mybatis-spring-boot-starter.version>
+        <mybatis.version>3.5.1</mybatis.version>
     </properties>
 
     <dependencyManagement>
@@ -49,6 +57,12 @@
                 <version>${reversion}</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.maksdu.usr</groupId>
+                <artifactId>usr-center-dao</artifactId>
+                <version>${reversion}</version>
+            </dependency>
+
             <!-- Spring cloud -->
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
@@ -56,6 +70,69 @@
                 <version>${spring.cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-annotations</artifactId>
+                <version>${swagger.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger2</artifactId>
+                <version>${springfox-swagger.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger-ui</artifactId>
+                <version>${springfox-swagger.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.xiaoymin</groupId>
+                <artifactId>swagger-bootstrap-ui</artifactId>
+                <version>${swagger-bootstrap-ui.version}</version>
+            </dependency>
+
+            <!-- DB 相关 -->
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${mysql-connector-java.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.mybatis</groupId>
+                <artifactId>mybatis</artifactId>
+                <version>${mybatis.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mybatis.spring.boot</groupId>
+                <artifactId>mybatis-spring-boot-starter</artifactId>
+                <version>${mybatis-spring-boot-starter.version}</version>
+            </dependency>
+
+            <!-- RPC 相关 -->
+            <dependency>
+                <groupId>org.apache.dubbo</groupId>
+                <artifactId>dubbo</artifactId>
+                <version>${dubbo.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.dubbo</groupId>
+                <artifactId>dubbo-spring-boot-starter</artifactId>
+                <version>${dubbo.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>de.codecentric</groupId>
+                <artifactId>spring-boot-admin-starter-client</artifactId>
+                <version>${spring-boot-admin-starter-client.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-jwt</artifactId>
+                <version>1.1.0.RELEASE</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -121,6 +198,7 @@
         <module>usr-center-core</module>
         <module>usr-center-domain</module>
         <module>usr-center-service</module>
+        <module>usr-center-dao</module>
     </modules>
 
 </project>

@@ -5,7 +5,9 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class WeChatUserInfoDO extends BaseDO {
+public class WeChatUserDetailsDO extends BaseDO {
+
+    private String openId;
 
     private String nickName;
 
