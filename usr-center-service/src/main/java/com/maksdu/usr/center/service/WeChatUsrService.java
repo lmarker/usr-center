@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 public interface WeChatUsrService {
 
-    void storageUserInfo(UserInfo userInfo);
+    void storageUserInfo(UserInfo userInfo, String openId);
 
     WeChatUserDetailsDO getUserInfoByOpenId(String openId);
 }

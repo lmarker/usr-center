@@ -47,9 +47,12 @@ public class WeChatAuthenticationFilter extends OncePerRequestFilter {
             if(authentication == null || authentication.getDetails() == null) {
                 //TODO 根据authHeader 计算出openId
                 String openId = request.getHeader(WeChatUtils.OPENID);
+                log.info("openId :{}", openId);
                 UserDetails userDetails = userDetailsService.loadUserByUsername(openId);
-                authentication = new WeChatUsrAuth(authHeader,userDetails, openId);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                if(userDetails != null) {
+                    authentication = new WeChatUsrAuth(authHeader, userDetails, openId);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
             }
         }
 
