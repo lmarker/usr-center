@@ -22,7 +22,7 @@ public abstract class AbstractGenerator {
     private String count() {
         Integer number = counter.getOrDefault(getKey(), 0);
         counter.put(getKey(), ++number);
-        return String.format("%4d",number);
+        return String.format("%04d",number);
     }
 
     private String getKey() {

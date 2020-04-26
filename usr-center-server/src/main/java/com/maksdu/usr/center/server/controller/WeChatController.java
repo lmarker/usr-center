@@ -51,6 +51,8 @@ public class WeChatController {
     /** 用户会话 ,返回的是用户的openId 即唯一标识 **/
     @PostMapping("/session")
     public WeChatJsCode2SessionDTO getJsCode2SessionDTO(@RequestBody AccessTokenParam param) {
+        //TODO 不应该返回session_key 给小程序端，因为session_key是服务端与微信交互的凭证
+        //     可以用jwt作为小程序端与服务端的token凭证，session_key以openId为key, 保存到redis中
         WeChatJsCode2SessionDTO weChatJsCode2SessionDTO =
                 weChatFeign.getJscode2session(appId, appSecret, param.getCode(), grantType);
         //存入redis 作为 key:
