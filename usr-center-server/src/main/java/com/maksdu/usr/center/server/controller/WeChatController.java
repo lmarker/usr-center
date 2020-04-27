@@ -3,6 +3,7 @@ package com.maksdu.usr.center.server.controller;
 import com.maksdu.usr.center.core.proxy.dto.WeChatAccessTokenDTO;
 import com.maksdu.usr.center.core.proxy.dto.WeChatJsCode2SessionDTO;
 import com.maksdu.usr.center.core.proxy.feign.WeChatFeign;
+import com.maksdu.usr.center.domain.WeChatUserDetailsDO;
 import com.maksdu.usr.center.server.authentication.CustomUserDetailsService;
 import com.maksdu.usr.center.server.authentication.WeChatUsrAuth;
 import com.maksdu.usr.center.service.WeChatUsrService;
@@ -55,21 +56,12 @@ public class WeChatController {
         //     可以用jwt作为小程序端与服务端的token凭证，session_key以openId为key, 保存到redis中
         WeChatJsCode2SessionDTO weChatJsCode2SessionDTO =
                 weChatFeign.getJscode2session(appId, appSecret, param.getCode(), grantType);
-        //存入redis 作为 key:
-        String sessionKey = weChatJsCode2SessionDTO.getSessionKey();
-        //存入redis 作为 value:
         String openid = weChatJsCode2SessionDTO.getOpenid();
         UserDetails details = customUserDetailsService.loadUserByUsername(openid);
 
         if(details == null) {
             weChatJsCode2SessionDTO.setIsNotFirstLogin(false);
         }
-        //认证对象
-        Authentication weChatUsrAuth = new WeChatUsrAuth(
-                sessionKey,
-                details,
-                openid);
-        SecurityContextHolder.getContext().setAuthentication(weChatUsrAuth);
         return weChatJsCode2SessionDTO;
     }
 
@@ -78,10 +70,13 @@ public class WeChatController {
      */
     @PostMapping("/user_info")
     @ResponseStatus(value = HttpStatus.ACCEPTED)
-    public void getUserInfo(@RequestHeader String openid, @RequestBody UserInfo userInfo) {
+    public WeChatUserDetailsDO getUserInfo(@RequestHeader String openid, @RequestBody UserInfo userInfo) {
         //TODO 获取前端传递过来的用户信息可以进行持久化
-        log.info("get userInfo:{}",userInfo);
-        weChatUsrService.storageUserInfo(userInfo, openid);
+        WeChatUserDetailsDO details = weChatUsrService.getUserInfoByOpenId(openid);
+        if(details == null) {
+            weChatUsrService.storageUserInfo(userInfo,openid);
+        }
+        return weChatUsrService.getUserInfoByOpenId(openid);
     }
 
     @Data

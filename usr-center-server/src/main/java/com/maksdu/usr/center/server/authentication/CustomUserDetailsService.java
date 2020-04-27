@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
+    //TODO 使用redis把信息缓存起来，不用每次去数据库查
     private final WeChatUsrService weChatUsrService;
 
     @Override

@@ -10,12 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface WeChatFeign {
 
     /**
-     * 获取凭证
-     * @param code
-     * @param appid
-     * @param secret
-     * @param grant_type
-     * @return
+     * 获取临时凭证
      */
     @GetMapping("/cgi-bin/token")
     WeChatAccessTokenDTO getAccessToken(
@@ -25,6 +20,8 @@ public interface WeChatFeign {
             @RequestParam String grant_type
     );
 
+    /**
+     */
     @GetMapping("sns/jscode2session")
     WeChatJsCode2SessionDTO getJscode2session(
             @RequestParam String appid,

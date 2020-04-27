@@ -25,16 +25,18 @@ public class SecurityConfig {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             http.authorizeRequests()
-                    .antMatchers("/wx/*","/auth/*")
+                    .antMatchers("/wx/session","/error")
                     .permitAll()
                     .anyRequest()
-                    .authenticated();
+                    .authenticated()
+                    .and()
+                    .addFilterBefore(weChatAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
             //无状态session;
             http.sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-            http.addFilterBefore(weChatAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+            //http.addFilterBefore(weChatAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
             //TODO http.authenticationProvider()
 

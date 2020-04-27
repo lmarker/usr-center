@@ -3,7 +3,7 @@
 <mapper namespace="com.maksdu.usr.center.dao.WeChatUserInfoDAO">
 
     <insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="com.maksdu.usr.center.domain.WeChatUserDetailsDO">
-        insert into usr_info_detail(code, openId, nickName, gender, city, province, country, avatarUrl) values
+        insert into usr_info_detail(code, openId, nickName, gender, city, province, country, avatarUrl,createTime, updateTime) values
         (
             #{code},
             #{openId},
@@ -12,7 +12,9 @@
             #{city},
             #{province},
             #{country},
-            #{avatarUrl}
+            #{avatarUrl},
+            NOW(),
+            NOW()
         )
     </insert>
 

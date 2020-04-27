@@ -18,12 +18,13 @@ public class WeChatUsrAuth implements Authentication {
     //用户具体信息
     private String openId;
 
-    private boolean isAuthentication = false;
+    private boolean isAuthentication;
 
     public WeChatUsrAuth(String sessionKey, UserDetails userDetails, String openId) {
         this.sessionKey = sessionKey;
         this.userDetails = userDetails;
         this.openId = openId;
+        this.isAuthentication = true;
     }
 
     @Override

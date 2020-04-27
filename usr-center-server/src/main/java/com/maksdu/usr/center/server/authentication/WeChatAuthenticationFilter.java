@@ -1,7 +1,5 @@
 package com.maksdu.usr.center.server.authentication;
 
-import com.maksdu.usr.center.core.proxy.common.ResultCode;
-import com.maksdu.usr.center.core.proxy.exception.BizException;
 import com.maksdu.usr.center.server.utils.WeChatUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -43,16 +41,13 @@ public class WeChatAuthenticationFilter extends OncePerRequestFilter {
             log.info("正在进行token 验证 --- {}", authHeader);
             // 获取token
             authHeader = authHeader.substring(WeChatUtils.TOKEN_PREFIX.length());
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            if(authentication == null || authentication.getDetails() == null) {
+            if(SecurityContextHolder.getContext().getAuthentication() == null) {
                 //TODO 根据authHeader 计算出openId
                 String openId = request.getHeader(WeChatUtils.OPENID);
                 log.info("openId :{}", openId);
                 UserDetails userDetails = userDetailsService.loadUserByUsername(openId);
-                if(userDetails != null) {
-                    authentication = new WeChatUsrAuth(authHeader, userDetails, openId);
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                }
+                Authentication authentication = new WeChatUsrAuth(authHeader, userDetails, openId);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }
 
