@@ -2,9 +2,11 @@ package com.maksdu.usr.center.domain;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.apache.ibatis.type.Alias;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
+@Alias("detail")
 public class WeChatUserDetailsDO extends BaseDO {
 
     private String openId;

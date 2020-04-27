@@ -5,6 +5,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 public class WeChatUsrAuth implements Authentication {
 
@@ -20,16 +22,27 @@ public class WeChatUsrAuth implements Authentication {
 
     private boolean isAuthentication;
 
+    private Set<GrantedAuthority> authoritySet;
+
     public WeChatUsrAuth(String sessionKey, UserDetails userDetails, String openId) {
         this.sessionKey = sessionKey;
         this.userDetails = userDetails;
         this.openId = openId;
-        this.isAuthentication = true;
+        this.authoritySet = new HashSet<>();
+
+    }
+
+    public WeChatUsrAuth(String sessionKey, UserDetails userDetails, String openId, Set<GrantedAuthority> defaultAuthorities) {
+        this.sessionKey = sessionKey;
+        this.userDetails = userDetails;
+        this.openId = openId;
+        this.authoritySet = defaultAuthorities;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return userDetails.getAuthorities();
+        authoritySet.addAll(userDetails.getAuthorities());
+        return authoritySet;
     }
 
     @Override
@@ -49,7 +62,19 @@ public class WeChatUsrAuth implements Authentication {
 
     @Override
     public boolean isAuthenticated() {
-        return isAuthentication;
+        if(userDetails == null) {
+            return isAuthentication;
+        } else {
+            if(userDetails instanceof WeChatUsrAuth) {
+                return isAuthentication
+                        && userDetails.isEnabled()
+                        && userDetails.isAccountNonLocked()
+                        && userDetails.isAccountNonExpired()
+                        && userDetails.isCredentialsNonExpired();
+            } else {
+                return isAuthentication;
+            }
+        }
     }
 
     @Override
