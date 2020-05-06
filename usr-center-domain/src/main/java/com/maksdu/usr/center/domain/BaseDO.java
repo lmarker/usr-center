@@ -3,6 +3,7 @@ package com.maksdu.usr.center.domain;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 
 @Data
 public abstract class BaseDO {

@@ -12,4 +12,6 @@ public class WeChatUserRoleDO extends BaseDO{
     private Long groupId;
 
     private String roleName;
+
+    private Integer enable;
 }

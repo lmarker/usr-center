@@ -39,5 +39,10 @@
             <artifactId>httpclient</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.maksdu.usr</groupId>
+            <artifactId>usr-center-dao</artifactId>
+        </dependency>
+
     </dependencies>
 </project>

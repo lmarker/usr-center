@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.maksdu.usr.center.dao.WeChatUserStatusDAO">
+
+    <sql id="baseColumn">
+        select id,
+               openId,
+               code,
+               `lock`,
+               account_expired,
+               credentials_expired,
+               enable,
+               createTime,
+               updateTime
+        from usr_status
+    </sql>
+
+    <sql id="queryCondition">
+        <where>
+            enable = 0
+            <if test="id != null">
+                AND id = #{id}
+            </if>
+            <if test="openId != null">
+                AND openId = #{openId}
+            </if>
+            <if test="code != null">
+                AND `code` = #{code}
+            </if>
+            <if test="lock != null">
+                AND `lock` = #{lock}
+            </if>
+            <if test="account_expired != null">
+                AND account_expired = #{account_expired}
+            </if>
+            <if test="credentials_expired != null">
+                AND credentials_expired = #{credentials_expired}
+            </if>
+        </where>
+    </sql>
+
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="userStatus">
+        insert into usr_status(openId, code, `lock`, account_expired, credentials_expired, enable, createTime, updateTime)
+        values (
+                #{openId},
+                #{code},
+                #{lock},
+                #{accountExpired},
+                #{credentialsExpired},
+                true,
+                NOW(),
+                NOW()
+                )
+    </insert>
+
+    <select id="findAll" resultType="userStatus">
+        <include refid="baseColumn"/>
+        <include refid="queryCondition"/>
+        limit #{pageNo, size}
+    </select>
+
+
+</mapper>

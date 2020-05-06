@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.maksdu.usr.center.dao.WeChatUserRoleGroupDAO">
+
+    <sql id="baseColumn">
+        select id, code, groupName, createTime, updateTime, enable
+        from usr_role_group
+    </sql>
+
+    <sql id="queryCondition">
+        <where>
+            enable = 0
+            <if test="id != null">
+                AND id = #{id}
+            </if>
+            <if test="code != null">
+                AND `code` = #{code}
+            </if>
+            <if test="groupName != null">
+                AND groupName = #{groupName}
+            </if>
+        </where>
+    </sql>
+
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="roleGroup">
+        insert into usr_role_group(code, groupName, createTime, updateTime, enable)
+        values (#{code},
+                #{groupName},
+                NOW(),
+                NOW(),
+                true)
+    </insert>
+
+    <select id="findAll" resultType="roleGroup">
+        <include refid="baseColumn"/>
+        <include refid="queryCondition"/>
+        limit #{pageNo, size}
+    </select>
+
+
+</mapper>

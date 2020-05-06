@@ -11,6 +11,6 @@ public class WeChatUserRoleGroupDO extends BaseDO {
 
     private String groupName;
 
-    private Boolean usable;
+    private Integer enable;
 
 }

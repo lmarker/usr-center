@@ -1,6 +1,6 @@
 package com.maksdu.usr.center.service;
 
-import com.maksdu.usr.center.core.proxy.generator.UsrGenerator;
+import com.maksdu.usr.center.core.proxy.utils.IdContextGeneratorHolder;
 import com.maksdu.usr.center.dao.WeChatUserInfoDAO;
 import com.maksdu.usr.center.domain.WeChatUserDetailsDO;
 import com.maksdu.usr.center.service.dto.UserInfo;
@@ -12,16 +12,14 @@ import org.springframework.stereotype.Service;
 @Service
 @Primary
 @AllArgsConstructor
-public class WeChatUsrServiceImpl extends BaseService implements WeChatUsrService {
+public class WeChatUsrServiceImpl implements WeChatUsrService {
 
     private final WeChatUserInfoDAO weChatUserInfoDAO;
-
-    private final UsrGenerator usrGenerator;
 
     @Override
     public void storageUserInfo(UserInfo userInfo, String openId) {
         WeChatUserDetailsDO details = new WeChatUserDetailsDO();
-        details.setCode(usrGenerator.getId());
+        details.setCode(IdContextGeneratorHolder.generatorId(() -> "USR"));
         details.setOpenId(openId);
         BeanUtils.copyProperties(userInfo, details);
         weChatUserInfoDAO.insert(details);

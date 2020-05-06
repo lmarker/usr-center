@@ -13,4 +13,8 @@ public class WeChatUserAuthorityDO extends BaseDO {
 
     private String clients;
 
+    private Integer number;
+
+    private Integer enable;
+
 }
