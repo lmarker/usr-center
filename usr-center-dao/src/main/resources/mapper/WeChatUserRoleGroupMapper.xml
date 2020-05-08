@@ -3,7 +3,7 @@
 <mapper namespace="com.maksdu.usr.center.dao.WeChatUserRoleGroupDAO">
 
     <sql id="baseColumn">
-        select id, code, groupName, createTime, updateTime, enable
+        select id, code, groupName, creatorId, creatorNick, createTime, updateTime, enable
         from usr_role_group
     </sql>
 
@@ -23,9 +23,11 @@
     </sql>
 
     <insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="roleGroup">
-        insert into usr_role_group(code, groupName, createTime, updateTime, enable)
+        insert into usr_role_group(code, groupName, creatorId, creatorNick, createTime, updateTime, enable)
         values (#{code},
                 #{groupName},
+                #{creatorId},
+                #{creatorName},
                 NOW(),
                 NOW(),
                 true)

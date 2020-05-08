@@ -37,5 +37,10 @@
         limit #{pageNo, size}
     </select>
 
+    <select id="findByGroupId" resultType="role">
+        <include refid="baseColumn"/>
+        where groupId = #{groupId} and `enable` = 0
+    </select>
+
 
 </mapper>

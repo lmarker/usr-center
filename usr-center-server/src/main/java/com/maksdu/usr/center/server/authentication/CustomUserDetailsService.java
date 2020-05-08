@@ -28,8 +28,11 @@ public class CustomUserDetailsService implements UserDetailsService {
             return null;
         }
         return WeChatPrincipal.builder()
+                .userId(weChatUserDetailsDO.getId())
                 .entity(weChatUserDetailsDO)
                 .openId(weChatUserDetailsDO.getOpenId())
+                .nickName(weChatUserDetailsDO.getNickName())
+                .code(weChatUserDetailsDO.getCode())
                 .build();
     }
 

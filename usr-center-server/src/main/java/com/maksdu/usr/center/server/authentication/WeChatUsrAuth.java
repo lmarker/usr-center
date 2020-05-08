@@ -1,13 +1,14 @@
 package com.maksdu.usr.center.server.authentication;
 
+import lombok.Data;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+@Data
 public class WeChatUsrAuth implements Authentication {
 
     //第三方的key
@@ -15,7 +16,7 @@ public class WeChatUsrAuth implements Authentication {
 
     //用户密码信息
     //微信登录不包含密码
-    private UserDetails userDetails;
+    private WeChatPrincipal detail;
 
     //用户具体信息
     private String openId;
@@ -24,24 +25,24 @@ public class WeChatUsrAuth implements Authentication {
 
     private Set<GrantedAuthority> authoritySet;
 
-    public WeChatUsrAuth(String sessionKey, UserDetails userDetails, String openId) {
+    public WeChatUsrAuth(String sessionKey, WeChatPrincipal userDetails, String openId) {
         this.sessionKey = sessionKey;
-        this.userDetails = userDetails;
+        this.detail = userDetails;
         this.openId = openId;
         this.authoritySet = new HashSet<>();
 
     }
 
-    public WeChatUsrAuth(String sessionKey, UserDetails userDetails, String openId, Set<GrantedAuthority> defaultAuthorities) {
+    public WeChatUsrAuth(String sessionKey, WeChatPrincipal userDetails, String openId, Set<GrantedAuthority> defaultAuthorities) {
         this.sessionKey = sessionKey;
-        this.userDetails = userDetails;
+        this.detail = userDetails;
         this.openId = openId;
         this.authoritySet = defaultAuthorities;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        authoritySet.addAll(userDetails.getAuthorities());
+        authoritySet.addAll(detail.getAuthorities());
         return authoritySet;
     }
 
@@ -52,29 +53,26 @@ public class WeChatUsrAuth implements Authentication {
 
     @Override
     public Object getDetails() {
-        return openId;
+        return detail;
     }
 
     @Override
     public Object getPrincipal() {
-        return userDetails;
+        return openId;
     }
 
     @Override
     public boolean isAuthenticated() {
-        if(userDetails == null) {
-            return isAuthentication;
-        } else {
-            if(userDetails instanceof WeChatUsrAuth) {
-                return isAuthentication
-                        && userDetails.isEnabled()
-                        && userDetails.isAccountNonLocked()
-                        && userDetails.isAccountNonExpired()
-                        && userDetails.isCredentialsNonExpired();
-            } else {
-                return isAuthentication;
-            }
-        }
+//        if(detail == null) {
+//            return isAuthentication;
+//        } else {
+//            return isAuthentication
+//                    && detail.isEnabled()
+//                    && detail.isAccountNonLocked()
+//                    && detail.isAccountNonExpired()
+//                    && detail.isCredentialsNonExpired();
+//        }
+        return true;
     }
 
     @Override

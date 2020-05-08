@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface BaseDAO<S extends BaseDO, ID extends Serializable> {
 
-    void insert(S item);
+    Integer insert(S item);
 
     List<S> findAll(S item);
 

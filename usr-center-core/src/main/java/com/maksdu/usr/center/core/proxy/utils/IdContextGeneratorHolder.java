@@ -2,8 +2,6 @@ package com.maksdu.usr.center.core.proxy.utils;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -63,18 +61,4 @@ public class IdContextGeneratorHolder implements IdGenerator, StringContextGener
         return "usr:"+stamp()+":"+generator.prefix();
     }
 
-    public static void main(String[] args) throws InterruptedException {
-        AtomicInteger atomicInteger = new AtomicInteger(0);
-        ExecutorService executors = Executors.newCachedThreadPool();
-        for (int i=0 ; i< 4000; i++) {
-            executors.submit(()->{
-                String id =  IdContextGeneratorHolder.generatorId(()->"USR");
-                System.out.println(id);
-                atomicInteger.incrementAndGet();
-            });
-        }
-        Thread.sleep(3000);
-        System.out.println(atomicInteger.get());
-        executors.shutdown();
-    }
 }

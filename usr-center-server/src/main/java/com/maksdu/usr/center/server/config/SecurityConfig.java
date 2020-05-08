@@ -10,6 +10,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsUtils;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
 
 @Slf4j
@@ -25,12 +27,12 @@ public class SecurityConfig {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             http.authorizeRequests()
-                    .antMatchers("/wx/session","/error")
+                    .antMatchers("/wx/session")
                     .permitAll()
                     .anyRequest()
-                    .authenticated()
-                    .and()
-                    .addFilterBefore(weChatAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                    .authenticated();
+
+            http.addFilterBefore(weChatAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
             //无状态session;
             http.sessionManagement()
@@ -53,7 +55,24 @@ public class SecurityConfig {
                             "/swagger-resources/configuration/ui",
                             "/swagger-resources",
                             "/swagger-resources/configuration/security",
-                            "/swagger-ui.html");
+                            "/swagger-ui.html",
+                            "/webjars/**");
         }
+    }
+
+    @Configuration
+    public static class WebMvcConfigurer extends WebMvcConfigurationSupport {
+
+        @Override
+        public void addResourceHandlers(ResourceHandlerRegistry registry) {
+            registry.addResourceHandler("/**").addResourceLocations(
+                    "classpath:/static/");
+            registry.addResourceHandler("swagger-ui.html").addResourceLocations(
+                    "classpath:/META-INF/resources/");
+            registry.addResourceHandler("/webjars/**").addResourceLocations(
+                    "classpath:/META-INF/resources/webjars/");
+            super.addResourceHandlers(registry);
+        }
+
     }
 }

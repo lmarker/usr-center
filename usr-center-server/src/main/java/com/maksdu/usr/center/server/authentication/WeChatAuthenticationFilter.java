@@ -30,25 +30,24 @@ public class WeChatAuthenticationFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
         String authHeader = request.getHeader(WeChatUtils.TOKEN_ACCESS);
-        log.info("## authHeader={}", authHeader);
 
         if (authHeader != null) {
 
-            if (StringUtils.isEmpty(authHeader) || !authHeader.startsWith(WeChatUtils.TOKEN_PREFIX)) {
+            if (StringUtils.isEmpty(authHeader)) {
                 log.info("### 用户未登录，请先登录 ### token: {}", authHeader);
             }
 
             log.info("正在进行token 验证 --- {}", authHeader);
             // 获取token
-            authHeader = authHeader.substring(WeChatUtils.TOKEN_PREFIX.length());
             if(SecurityContextHolder.getContext().getAuthentication() == null) {
                 //TODO 根据authHeader 计算出openId
                 String openId = request.getHeader(WeChatUtils.OPENID);
                 log.info("openId :{}", openId);
-                UserDetails userDetails = userDetailsService.loadUserByUsername(openId);
+                WeChatPrincipal userDetails = (WeChatPrincipal) userDetailsService.loadUserByUsername(openId);
                 Authentication authentication = new WeChatUsrAuth(authHeader, userDetails, openId);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
+
         }
 
         filterChain.doFilter(request, response);
