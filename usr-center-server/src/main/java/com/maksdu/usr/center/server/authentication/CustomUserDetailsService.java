@@ -21,11 +21,11 @@ public class CustomUserDetailsService implements UserDetailsService {
         return convert(weChatUsrService.getUserInfoByOpenId(openid));
     }
 
-    private WeChatPrincipal convert(WeChatUserDetailsDO weChatUserDetailsDO) {
+    private UserDetail convert(WeChatUserDetailsDO weChatUserDetailsDO) {
         if(weChatUserDetailsDO == null) {
             return null;
         }
-        WeChatPrincipal principal = new WeChatPrincipal();
+        UserDetail principal = new UserDetail();
         principal.setUserId(weChatUserDetailsDO.getId());
         principal.setOpenId(weChatUserDetailsDO.getOpenId());
         principal.setNickName(weChatUserDetailsDO.getNickName());

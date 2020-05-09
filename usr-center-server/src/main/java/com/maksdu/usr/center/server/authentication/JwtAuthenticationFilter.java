@@ -1,18 +1,13 @@
 package com.maksdu.usr.center.server.authentication;
 
 import com.maksdu.usr.center.server.utils.JwtUtils;
-import com.maksdu.usr.center.server.utils.WeChatUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import javax.annotation.Resource;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -47,9 +42,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String username = jwtUtils.getUsernameFromToken(auth_token);
         logger.info(String.format("Checking authentication for user %s.", username));
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            WeChatPrincipal user = jwtUtils.getUserFromToken(auth_token);
+            UserDetail user = jwtUtils.getUserFromToken(auth_token);
             if (jwtUtils.validateToken(auth_token, user)) {
-                WeChatUsrAuth authentication = new WeChatUsrAuth(user);
+                User authentication = new User(user);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }

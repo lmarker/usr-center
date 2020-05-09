@@ -1,7 +1,7 @@
 package com.maksdu.usr.center.server.controller;
 
 import com.maksdu.usr.center.domain.WeChatUserRoleDO;
-import com.maksdu.usr.center.server.authentication.WeChatUsrAuth;
+import com.maksdu.usr.center.server.authentication.User;
 import com.maksdu.usr.center.service.WeChatUsrManagerService;
 import io.swagger.annotations.Api;
 import lombok.AllArgsConstructor;
@@ -27,7 +27,7 @@ public class AuthorityController extends BaseController {
 
     @PostMapping("/create")
     public void createGroup(String groupName) {
-        WeChatUsrAuth authentication = (WeChatUsrAuth) SecurityContextHolder.getContext().getAuthentication();
+        User authentication = (User) SecurityContextHolder.getContext().getAuthentication();
         weChatUsrManagerService.createGroup(groupName, getUserId(), getUserName());
     }
 

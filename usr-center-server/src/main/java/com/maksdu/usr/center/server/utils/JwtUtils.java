@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.google.common.collect.Lists;
 import com.maksdu.usr.center.domain.WeChatUserRoleDO;
-import com.maksdu.usr.center.server.authentication.WeChatPrincipal;
+import com.maksdu.usr.center.server.authentication.UserDetail;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.CompressionCodecs;
 import io.jsonwebtoken.Jwts;
@@ -30,7 +30,7 @@ public class JwtUtils {
     private static final String CLAIM_KEY_USER_OPEN_ID = "open_id";
     private static final String CLAIM_KEY_AUTHORITIES = "scope";
 
-    //TODO redis替换
+    //TODO redis替换,因为重启后，会被清空，也不好支持超时
     private Map<String, String> tokenMap = new ConcurrentHashMap<>(32);
 
     @Value("${jwt.secret}")
@@ -44,8 +44,8 @@ public class JwtUtils {
 
     private final SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS256;
 
-    public WeChatPrincipal getUserFromToken(String token) {
-        WeChatPrincipal userDetail;
+    public UserDetail getUserFromToken(String token) {
+        UserDetail userDetail;
         try {
             final Claims claims = getClaimsFromToken(token);
             long userId = getUserIdFromToken(token);
@@ -54,7 +54,7 @@ public class JwtUtils {
             String openId = claims.get(CLAIM_KEY_USER_OPEN_ID).toString();
             WeChatUserRoleDO role = WeChatUserRoleDO.builder()
                     .roleName(roleName).build();
-            userDetail = new WeChatPrincipal(userId,openId, username, role);
+            userDetail = new UserDetail(userId,openId, username, role);
         } catch (Exception e) {
             userDetail = null;
         }
@@ -94,7 +94,7 @@ public class JwtUtils {
         return created;
     }
 
-    public String generateAccessToken(WeChatPrincipal userDetail) {
+    public String generateAccessToken(UserDetail userDetail) {
         Map<String, Object> claims = generateClaims(userDetail);
         claims.put(CLAIM_KEY_AUTHORITIES, authoritiesToArray(userDetail.getAuthorities()).get(0));
         return generateAccessToken(userDetail.getUsername(), claims);
@@ -130,7 +130,7 @@ public class JwtUtils {
 
 
     public Boolean validateToken(String token, UserDetails userDetails) {
-        WeChatPrincipal userDetail = (WeChatPrincipal) userDetails;
+        UserDetail userDetail = (UserDetail) userDetails;
         final long userId = getUserIdFromToken(token);
         final String username = getUsernameFromToken(token);
         return (userId == userDetail.getUserId()
@@ -139,7 +139,7 @@ public class JwtUtils {
         );
     }
 
-    public String generateRefreshToken(WeChatPrincipal userDetail) throws JsonProcessingException {
+    public String generateRefreshToken(UserDetail userDetail) throws JsonProcessingException {
         Map<String, Object> claims = generateClaims(userDetail);
         // 只授于更新 token 的权限
         String roles[] = new String[]{JwtUtils.ROLE_REFRESH_TOKEN};
@@ -147,14 +147,17 @@ public class JwtUtils {
         return generateRefreshToken(userDetail.getUsername(), claims);
     }
 
+    //TODO redis 操作
     public void putToken(String userName, String token) {
         tokenMap.put(userName, token);
     }
 
+    //TODO redis 操作
     public void deleteToken(String userName) {
         tokenMap.remove(userName);
     }
 
+    //TODO redis 操作
     public boolean containToken(String userName, String token) {
         if (userName != null && tokenMap.containsKey(userName) && tokenMap.get(userName).equals(token)) {
             return true;
@@ -188,7 +191,7 @@ public class JwtUtils {
         return (lastPasswordReset != null && created.before(lastPasswordReset));
     }
 
-    private Map<String, Object> generateClaims(WeChatPrincipal userDetail) {
+    private Map<String, Object> generateClaims(UserDetail userDetail) {
         Map<String, Object> claims = new HashMap<>(16);
         claims.put(CLAIM_KEY_USER_ID, userDetail.getUserId());
         claims.put(CLAIM_KEY_USER_OPEN_ID, userDetail.getOpenId());

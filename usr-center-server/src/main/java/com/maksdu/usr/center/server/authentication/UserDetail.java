@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 
 @Data
 @NoArgsConstructor
-public class WeChatPrincipal implements UserDetails {
+public class UserDetail implements UserDetails {
 
     private Long userId;
     private String openId;
@@ -29,14 +29,14 @@ public class WeChatPrincipal implements UserDetails {
 
     private Set<GrantedAuthority> authoritySet;
 
-    public WeChatPrincipal(WeChatUserDetailsDO weChatUserDetailsDO) {
+    public UserDetail(WeChatUserDetailsDO weChatUserDetailsDO) {
         this.userId = weChatUserDetailsDO.getId();
         this.openId = weChatUserDetailsDO.getOpenId();
         this.nickName = weChatUserDetailsDO.getNickName();
         this.code = weChatUserDetailsDO.getCode();
     }
 
-    public WeChatPrincipal(Long userId, String openId, String nickName, WeChatUserRoleDO weChatUserRoleDO) {
+    public UserDetail(Long userId, String openId, String nickName, WeChatUserRoleDO weChatUserRoleDO) {
         this.userId = userId;
         this.openId = openId;
         this.nickName = nickName;

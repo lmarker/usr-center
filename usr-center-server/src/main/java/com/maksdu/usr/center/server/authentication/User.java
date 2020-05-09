@@ -6,27 +6,26 @@ import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Set;
 
 @Data
-public class WeChatUsrAuth implements Authentication {
+public class User implements Authentication {
 
 
     //用户密码信息
     //微信登录不包含密码
-    private WeChatPrincipal detail;
+    private UserDetail detail;
 
     private boolean isAuthentication;
 
     private Collection<? extends GrantedAuthority> authoritySet;
 
-    public WeChatUsrAuth(WeChatPrincipal userDetails) {
+    public User(UserDetail userDetails) {
         this.detail = userDetails;
         this.authoritySet = new HashSet<>();
 
     }
 
-    public WeChatUsrAuth(WeChatPrincipal userDetails, Collection<? extends GrantedAuthority> defaultAuthorities) {
+    public User(UserDetail userDetails, Collection<? extends GrantedAuthority> defaultAuthorities) {
         this.detail = userDetails;
         this.authoritySet = defaultAuthorities;
     }

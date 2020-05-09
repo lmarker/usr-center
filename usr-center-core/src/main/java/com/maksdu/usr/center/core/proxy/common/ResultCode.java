@@ -9,6 +9,7 @@ public enum ResultCode {
 
     SUCCESS(200),
     UNAUTHORIZED(401),
+    FORBIDDEN(401),
 
     USER_NOT_LOGGED_IN(20001),
 

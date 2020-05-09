@@ -32,7 +32,7 @@ public class SecurityConfig {
 
         private final JwtAuthenticationEntryPoint unauthorizedHandler;
 
-        //private final AccessDeniedHandler accessDeniedHandler;
+        private final AccessDeniedHandler accessDeniedHandler;
 
 
         private final JwtAuthenticationFilter jwtAuthenticationFilter;
@@ -42,10 +42,10 @@ public class SecurityConfig {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             http
-                    //.exceptionHandling().accessDeniedHandler(accessDeniedHandler).and()
+                    .exceptionHandling().accessDeniedHandler(accessDeniedHandler).and()
                     .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                     .authorizeRequests()
-                        .antMatchers("/wx/session","/error/**","/api/**").permitAll()
+                        .antMatchers("/wx/login","/error/**","/api/**").permitAll()
                     .anyRequest()
                     .authenticated();
 
