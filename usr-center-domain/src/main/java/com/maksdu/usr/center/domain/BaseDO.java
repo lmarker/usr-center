@@ -1,5 +1,6 @@
 package com.maksdu.usr.center.domain;
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;

@@ -11,54 +11,44 @@ import java.util.Set;
 @Data
 public class WeChatUsrAuth implements Authentication {
 
-    //第三方的key
-    private String sessionKey;
 
     //用户密码信息
     //微信登录不包含密码
     private WeChatPrincipal detail;
 
-    //用户具体信息
-    private String openId;
-
     private boolean isAuthentication;
 
-    private Set<GrantedAuthority> authoritySet;
+    private Collection<? extends GrantedAuthority> authoritySet;
 
-    public WeChatUsrAuth(String sessionKey, WeChatPrincipal userDetails, String openId) {
-        this.sessionKey = sessionKey;
+    public WeChatUsrAuth(WeChatPrincipal userDetails) {
         this.detail = userDetails;
-        this.openId = openId;
         this.authoritySet = new HashSet<>();
 
     }
 
-    public WeChatUsrAuth(String sessionKey, WeChatPrincipal userDetails, String openId, Set<GrantedAuthority> defaultAuthorities) {
-        this.sessionKey = sessionKey;
+    public WeChatUsrAuth(WeChatPrincipal userDetails, Collection<? extends GrantedAuthority> defaultAuthorities) {
         this.detail = userDetails;
-        this.openId = openId;
         this.authoritySet = defaultAuthorities;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        authoritySet.addAll(detail.getAuthorities());
         return authoritySet;
     }
 
     @Override
     public Object getCredentials() {
-        return sessionKey;
+        return null;
     }
 
     @Override
     public Object getDetails() {
-        return detail;
+        return null;
     }
 
     @Override
     public Object getPrincipal() {
-        return openId;
+        return detail;
     }
 
     @Override
@@ -67,10 +57,11 @@ public class WeChatUsrAuth implements Authentication {
 //            return isAuthentication;
 //        } else {
 //            return isAuthentication
+//                    && getName() != null
 //                    && detail.isEnabled()
-//                    && detail.isAccountNonLocked()
-//                    && detail.isAccountNonExpired()
-//                    && detail.isCredentialsNonExpired();
+//                    && !detail.isAccountNonLocked()
+//                    && !detail.isAccountNonExpired()
+//                    && !detail.isCredentialsNonExpired();
 //        }
         return true;
     }
@@ -82,6 +73,6 @@ public class WeChatUsrAuth implements Authentication {
 
     @Override
     public String getName() {
-        return openId;
+        return detail != null ? detail.getNickName() : null;
     }
 }

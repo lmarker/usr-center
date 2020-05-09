@@ -1,16 +1,20 @@
 package com.maksdu.usr.center.server.authentication;
 
+import com.maksdu.usr.center.dao.WeChatUserInfoDAO;
 import com.maksdu.usr.center.domain.WeChatUserDetailsDO;
-import lombok.Builder;
+import com.maksdu.usr.center.domain.WeChatUserRoleDO;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-@Builder
 @Data
+@NoArgsConstructor
 public class WeChatPrincipal implements UserDetails {
 
     private Long userId;
@@ -18,14 +22,32 @@ public class WeChatPrincipal implements UserDetails {
     private String nickName;
     private String code;
 
-    private boolean lock;
-    private boolean accountExpired;
-    private boolean credentialsExpired;
-    private boolean enable;
-
-    private WeChatUserDetailsDO entity;
+    private boolean isLock;
+    private boolean isAccountExpired;
+    private boolean isCredentialsExpired;
+    private boolean isEnable;
 
     private Set<GrantedAuthority> authoritySet;
+
+    public WeChatPrincipal(WeChatUserDetailsDO weChatUserDetailsDO) {
+        this.userId = weChatUserDetailsDO.getId();
+        this.openId = weChatUserDetailsDO.getOpenId();
+        this.nickName = weChatUserDetailsDO.getNickName();
+        this.code = weChatUserDetailsDO.getCode();
+    }
+
+    public WeChatPrincipal(Long userId, String openId, String nickName, WeChatUserRoleDO weChatUserRoleDO) {
+        this.userId = userId;
+        this.openId = openId;
+        this.nickName = nickName;
+        this.authoritySet = Stream.of(weChatUserRoleDO.getRoleName().split(","))
+                .map(str-> (GrantedAuthority) () -> str)
+                .collect(Collectors.toSet());
+        this.isLock = false;
+        this.isAccountExpired = false;
+        this.isCredentialsExpired = false;
+        this.isEnable = true;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -39,26 +61,26 @@ public class WeChatPrincipal implements UserDetails {
 
     @Override
     public String getUsername() {
-        return nickName;
+        return openId;
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return this.accountExpired;
+        return isAccountExpired;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return this.lock;
+        return isLock;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return this.credentialsExpired;
+        return isCredentialsExpired;
     }
 
     @Override
     public boolean isEnabled() {
-        return this.enable;
+        return isEnable;
     }
 }

@@ -1,13 +1,17 @@
 package com.maksdu.usr.center.server.controller;
 
+import com.maksdu.usr.center.domain.WeChatUserRoleDO;
 import com.maksdu.usr.center.server.authentication.WeChatUsrAuth;
 import com.maksdu.usr.center.service.WeChatUsrManagerService;
 import io.swagger.annotations.Api;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * @author lijiahao
@@ -25,6 +29,11 @@ public class AuthorityController extends BaseController {
     public void createGroup(String groupName) {
         WeChatUsrAuth authentication = (WeChatUsrAuth) SecurityContextHolder.getContext().getAuthentication();
         weChatUsrManagerService.createGroup(groupName, getUserId(), getUserName());
+    }
+
+    @GetMapping("/list")
+    public List<WeChatUserRoleDO> findAll(Long groupId) {
+        return weChatUsrManagerService.findRoleByGroupId(groupId);
     }
 
 }

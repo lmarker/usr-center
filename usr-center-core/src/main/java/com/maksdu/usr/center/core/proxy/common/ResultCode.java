@@ -8,6 +8,8 @@ import lombok.Getter;
 public enum ResultCode {
 
     SUCCESS(200),
+    UNAUTHORIZED(401),
+
     USER_NOT_LOGGED_IN(20001),
 
     ERROR_THROW(50001);

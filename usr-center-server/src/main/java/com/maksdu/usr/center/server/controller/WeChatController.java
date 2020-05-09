@@ -5,7 +5,9 @@ import com.maksdu.usr.center.core.proxy.dto.WeChatJsCode2SessionDTO;
 import com.maksdu.usr.center.core.proxy.feign.WeChatFeign;
 import com.maksdu.usr.center.domain.WeChatUserDetailsDO;
 import com.maksdu.usr.center.server.authentication.CustomUserDetailsService;
+import com.maksdu.usr.center.server.authentication.WeChatPrincipal;
 import com.maksdu.usr.center.server.authentication.WeChatUsrAuth;
+import com.maksdu.usr.center.server.utils.JwtUtils;
 import com.maksdu.usr.center.service.WeChatUsrService;
 import com.maksdu.usr.center.service.dto.UserInfo;
 import lombok.Data;
@@ -28,6 +30,8 @@ public class WeChatController {
 
     private final CustomUserDetailsService customUserDetailsService;
 
+    private final JwtUtils jwtUtils;
+
     @Value("wx97557af143923e7b")
     private String appId;
 
@@ -37,10 +41,14 @@ public class WeChatController {
     @Value("authorization_code")
     private String grantType;
 
-    public WeChatController(WeChatFeign weChatFeign, WeChatUsrService weChatUsrService, CustomUserDetailsService customUserDetailsService) {
+    public WeChatController(WeChatFeign weChatFeign,
+                            WeChatUsrService weChatUsrService,
+                            CustomUserDetailsService customUserDetailsService,
+                            JwtUtils jwtUtils) {
         this.weChatFeign = weChatFeign;
         this.weChatUsrService = weChatUsrService;
         this.customUserDetailsService = customUserDetailsService;
+        this.jwtUtils = jwtUtils;
     }
 
     /** 接口凭证 ,返回的是临时登录 token **/
@@ -57,10 +65,13 @@ public class WeChatController {
         WeChatJsCode2SessionDTO weChatJsCode2SessionDTO =
                 weChatFeign.getJscode2session(appId, appSecret, param.getCode(), grantType);
         String openid = weChatJsCode2SessionDTO.getOpenid();
-        UserDetails details = customUserDetailsService.loadUserByUsername(openid);
-
+        WeChatPrincipal details = (WeChatPrincipal) customUserDetailsService.loadUserByUsername(openid);
         if(details == null) {
             weChatJsCode2SessionDTO.setIsNotFirstLogin(false);
+        } else {
+            weChatJsCode2SessionDTO.setLocalToken(jwtUtils.generateAccessToken(details));
+            Authentication authentication = new WeChatUsrAuth(details);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         return weChatJsCode2SessionDTO;
     }
@@ -70,13 +81,16 @@ public class WeChatController {
      */
     @PostMapping("/user_info")
     @ResponseStatus(value = HttpStatus.ACCEPTED)
-    public WeChatUserDetailsDO getUserInfo(@RequestHeader String openid, @RequestBody UserInfo userInfo) {
+    public void getUserInfo(@RequestHeader String openid, @RequestBody UserInfo userInfo) {
         //TODO 获取前端传递过来的用户信息可以进行持久化
         WeChatUserDetailsDO details = weChatUsrService.getUserInfoByOpenId(openid);
         if(details == null) {
-            weChatUsrService.storageUserInfo(userInfo,openid);
+            weChatUsrService.storageUserInfo(userInfo, openid);
+            details = weChatUsrService.getUserInfoByOpenId(openid);
         }
-        return weChatUsrService.getUserInfoByOpenId(openid);
+        WeChatPrincipal principal = new WeChatPrincipal(details);
+        Authentication authentication = new WeChatUsrAuth(principal);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
     @Data

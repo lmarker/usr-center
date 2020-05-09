@@ -36,9 +36,9 @@ public class WeChatUsrManagerServiceImpl implements WeChatUsrManagerService {
 
     @Override
     public void addGroupRole(String roleName, Long groupId) {
-        WeChatUserRoleDO item = new WeChatUserRoleDO();
-        item.setGroupId(groupId);
-        item.setRoleName(roleName);
+        WeChatUserRoleDO item = WeChatUserRoleDO.builder()
+                .groupId(groupId)
+                .roleName(roleName).build();
         item.setCode(IdContextGeneratorHolder.generatorId(()->"ROL"));
         Assert.isTrue(weChatUserRoleDAO.insert(item) > 0, "用户角色添加失败");
     }

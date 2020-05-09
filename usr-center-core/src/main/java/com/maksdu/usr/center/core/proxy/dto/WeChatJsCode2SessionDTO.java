@@ -14,5 +14,7 @@ public class WeChatJsCode2SessionDTO implements Serializable {
 
     private String sessionKey;
 
+    private String localToken;
+
     private Boolean isNotFirstLogin = true;
 }

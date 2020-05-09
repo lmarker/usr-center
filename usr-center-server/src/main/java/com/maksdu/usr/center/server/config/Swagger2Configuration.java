@@ -36,8 +36,6 @@ public class Swagger2Configuration {
         List<Parameter> pars = new ArrayList<Parameter>();
         tokenPar.name(WeChatUtils.TOKEN_ACCESS).description("令牌").modelRef(new ModelRef("string")).parameterType("header").required(false).build();
         pars.add(tokenPar.build());
-        tokenPar.name(WeChatUtils.OPENID).description("openid").modelRef(new ModelRef("string")).parameterType("header").required(false).build();
-        pars.add(tokenPar.build());
         //添加head参数end
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())

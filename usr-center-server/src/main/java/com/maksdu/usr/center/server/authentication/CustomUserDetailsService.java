@@ -1,7 +1,5 @@
 package com.maksdu.usr.center.server.authentication;
 
-import com.maksdu.usr.center.core.proxy.common.ResultCode;
-import com.maksdu.usr.center.core.proxy.exception.BizException;
 import com.maksdu.usr.center.domain.WeChatUserDetailsDO;
 import com.maksdu.usr.center.service.WeChatUsrService;
 import lombok.AllArgsConstructor;
@@ -27,13 +25,12 @@ public class CustomUserDetailsService implements UserDetailsService {
         if(weChatUserDetailsDO == null) {
             return null;
         }
-        return WeChatPrincipal.builder()
-                .userId(weChatUserDetailsDO.getId())
-                .entity(weChatUserDetailsDO)
-                .openId(weChatUserDetailsDO.getOpenId())
-                .nickName(weChatUserDetailsDO.getNickName())
-                .code(weChatUserDetailsDO.getCode())
-                .build();
+        WeChatPrincipal principal = new WeChatPrincipal();
+        principal.setUserId(weChatUserDetailsDO.getId());
+        principal.setOpenId(weChatUserDetailsDO.getOpenId());
+        principal.setNickName(weChatUserDetailsDO.getNickName());
+        principal.setCode(weChatUserDetailsDO.getCode());
+        return principal;
     }
 
 }
