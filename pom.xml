@@ -24,7 +24,7 @@
         <swagger.version>1.5.21</swagger.version>
         <springfox-swagger.version>2.9.2</springfox-swagger.version>
         <swagger-bootstrap-ui.version>1.9.3</swagger-bootstrap-ui.version>
-        <dubbo.version>2.7.4.1</dubbo.version>
+        <dubbo.version>2.7.15</dubbo.version>
         <spring-boot-admin-starter-client.version>2.2.2</spring-boot-admin-starter-client.version>
         <mybatis-spring-boot-starter.version>2.0.0</mybatis-spring-boot-starter.version>
         <mybatis.version>3.5.1</mybatis.version>
