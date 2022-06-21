@@ -20,7 +20,7 @@
         <feign-version>10.2.3</feign-version>
         <guava.version>28.1-jre</guava.version>
         <spring.cloud.version>Hoxton.SR3</spring.cloud.version>
-        <mysql-connector-java.version>8.0.19</mysql-connector-java.version>
+        <mysql-connector-java.version>8.0.28</mysql-connector-java.version>
         <swagger.version>1.5.21</swagger.version>
         <springfox-swagger.version>2.9.2</springfox-swagger.version>
         <swagger-bootstrap-ui.version>1.9.3</swagger-bootstrap-ui.version>
